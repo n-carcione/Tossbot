@@ -4,9 +4,6 @@ import numpy as np
 def get_joint_1(target_location):
     # Use the x- and y-values of the target in the robot-base frame to calculate
     # what the value for the first joint should be
-    #With how the camera is set up, the center is off on the y
-    #(The camera sees the right side of the bin and factors this into the 
-    #estimation).  Shift the center a little left to account for this
     return math.atan2(target_location[1]-0.02,target_location[0])
 
 def get_release_velocity(d, theta_1, h0):
@@ -48,7 +45,7 @@ def get_ball_grab_pose(ball_loc):
     #y-position needs a 0.02 offset as determined by testing
     ball_pose[1, 3] = ball_loc[1] + 0.02
     #Ball will always be at this height as defined by set up
-    ball_pose[2, 3] = 0.0275
+    ball_pose[2, 3] = 0.025
     ball_pose[3,3] = 1
 
     return ball_pose.flatten()

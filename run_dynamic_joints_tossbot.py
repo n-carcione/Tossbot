@@ -46,36 +46,36 @@ if __name__ == "__main__":
             if thrown:
                 (ball_centers, ball_world_frame, azure_kinect_rgb_image, ball_contours) = locate_balls(cv_bridge, azure_kinect_intrinsics, azure_kinect_to_world_transform)
                 #Show all the ball detections
-                for bc in ball_centers:
-                    all_balls_rgb_image = cv2.circle(azure_kinect_rgb_image, (int(bc[0]),int(bc[1])), radius=10, color=(255, 255, 255), thickness=-1)
-                for cont in ball_contours:
-                    cv2.drawContours(all_balls_rgb_image, cont, -1, (0,0,0), 20)
-                all_balls_rgb_image = cv2.resize(all_balls_rgb_image, (600, 400))  
-                cv2.imshow("image", all_balls_rgb_image)
-                cv2.waitKey(1500)
+                # for bc in ball_centers:
+                #     all_balls_rgb_image = cv2.circle(azure_kinect_rgb_image, (int(bc[0]),int(bc[1])), radius=10, color=(255, 255, 255), thickness=-1)
+                # for cont in ball_contours:
+                #     cv2.drawContours(all_balls_rgb_image, cont, -1, (0,0,0), 20)
+                # all_balls_rgb_image = cv2.resize(all_balls_rgb_image, (600, 400))  
+                # cv2.imshow("image", all_balls_rgb_image)
+                # cv2.waitKey(1500)
             #Only consider something to be a ball if it is 0.1m - 0.8m in front of the robot
             #This helps avoid false detections from the slightly green 8020 used to 
             #construct the table for the arm
             if ball_world_frame[0][0] > 0.1 and ball_world_frame[0][0] < 0.5 and ball_world_frame[0][1] > -0.4 and ball_world_frame[0][1] < 0.4:                
                 #draw targetted ball on image
-                target_ball_rgb_image = cv2.circle(azure_kinect_rgb_image, (int(ball_centers[0][0]),int(ball_centers[0][1])), radius=10, color=(255, 255, 255), thickness=-1)
-                cv2.drawContours(target_ball_rgb_image, ball_contours[0], -1, (0,255,255), 20)
-                cv2.namedWindow("image")
-                target_ball_rgb_image = cv2.resize(target_ball_rgb_image, (600, 400))  
-                cv2.imshow("image", target_ball_rgb_image)
-                cv2.waitKey(1500)
+                # target_ball_rgb_image = cv2.circle(azure_kinect_rgb_image, (int(ball_centers[0][0]),int(ball_centers[0][1])), radius=10, color=(255, 255, 255), thickness=-1)
+                # cv2.drawContours(target_ball_rgb_image, ball_contours[0], -1, (0,255,255), 20)
+                # cv2.namedWindow("image")
+                # target_ball_rgb_image = cv2.resize(target_ball_rgb_image, (600, 400))  
+                # cv2.imshow("image", target_ball_rgb_image)
+                # cv2.waitKey(1500)
                 
                 (center,target_world_frame,azure_kinect_rgb_image,contour) = locate_container(cv_bridge,
                                                                                 azure_kinect_intrinsics,
                                                                                 azure_kinect_to_world_transform)
 
                 # draw detected bin on image
-                azure_kinect_rgb_image = cv2.circle(azure_kinect_rgb_image, (int(center[0]),int(center[1])), radius=10, color=(255, 255, 255), thickness=-1)
-                cv2.drawContours(azure_kinect_rgb_image, contour, -1, (0,0,0), 20)
-                cv2.namedWindow("image")
-                azure_kinect_rgb_image = cv2.resize(azure_kinect_rgb_image, (600, 400))  
-                cv2.imshow("image", azure_kinect_rgb_image)
-                cv2.waitKey(1500)
+                # azure_kinect_rgb_image = cv2.circle(azure_kinect_rgb_image, (int(center[0]),int(center[1])), radius=10, color=(255, 255, 255), thickness=-1)
+                # cv2.drawContours(azure_kinect_rgb_image, contour, -1, (0,0,0), 20)
+                # cv2.namedWindow("image")
+                # azure_kinect_rgb_image = cv2.resize(azure_kinect_rgb_image, (600, 400))  
+                # cv2.imshow("image", azure_kinect_rgb_image)
+                # cv2.waitKey(1500)
                 '''========================================================================'''
 
                 target_location = target_world_frame
@@ -95,6 +95,7 @@ if __name__ == "__main__":
                 #of end effector.  Use this to calculate distance ball needs to be thrown
                 transforms = fa.get_links_transforms(joints_rel, use_rigid_transforms=False)
                 ee_pos = transforms[-1, :3, 3]
+                print(ee_pos)
                 dist = math.sqrt( (target_location[0]-ee_pos[0])**2 + (target_location[1]-ee_pos[1])**2 )
                 print('Distance to throw: {}m'.format(dist))
                 
@@ -151,7 +152,7 @@ if __name__ == "__main__":
 
                     #Release point is actually at i==100 but there is a slight delay
                     #Reasonable performance found when i==85
-                    if i == 85:
+                    if i == 88:
                         fa.goto_gripper(0.08, speed=1.2 , block=False)
                     
                     pub.publish(ros_msg)
